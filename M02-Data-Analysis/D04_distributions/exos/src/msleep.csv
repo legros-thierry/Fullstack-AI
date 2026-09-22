@@ -1,0 +1,84 @@
+name,genus,vore,order,conservation,sleep_total,sleep_rem,sleep_cycle,awake,brainwt,bodywt
+African elephant,Afr,herbivore,Proboscidea,vu,3.3,0.5,,20.7,5.16,6654
+Asiatic elephant,Asi,herbivore,Proboscidea,en,3.9,0.6,,20.1,4.6,2547
+Big brown bat,Big,insectivore,Chiroptera,lc,19.7,3.9,0.13,4.3,0.0003,0.023
+Bottle-nosed dolphin,Bot,carnivore,Cetacea,lc,5.2,,0.9,18.8,1.32,173.5
+Brazilian tapir,Bra,herbivore,Perissodactyla,vu,4.4,1.0,0.9,19.6,0.169,160
+Cat,Cat,carnivore,Carnivora,lc,12.5,3.2,0.42,11.5,0.0256,3.3
+Chimpanzee,Chi,omnivore,Primates,en,9.7,1.4,1.42,14.3,0.44,52.2
+Chinchilla,Chi,herbivore,Rodentia,lc,12.5,1.5,0.12,11.5,0.0064,0.42
+Cow,Cow,herbivore,Artiodactyla,lc,4.0,0.7,0.67,20.0,0.423,600
+Dog,Dog,omnivore,Carnivora,lc,10.1,2.9,0.33,13.9,0.07,14
+Donkey,Don,herbivore,Perissodactyla,lc,3.1,0.4,,20.9,0.419,187.1
+Eastern american mole,Eas,insectivore,Insectivora,lc,8.4,2.1,0.19,15.6,0.0012,0.075
+Echidna,Ech,insectivore,Monotremata,lc,8.6,,0.5,15.4,0.025,4.5
+European hedgehog,Eur,omnivore,Insectivora,lc,10.1,3.5,0.23,13.9,0.0035,0.77
+Galago,Gal,omnivore,Primates,lc,9.8,1.9,,14.2,0.005,0.2
+Genet,Gen,carnivore,Carnivora,lc,6.3,1.3,0.63,17.7,0.0175,2.0
+Giant armadillo,Gia,insectivore,Cingulata,vu,18.1,6.1,,5.9,0.081,60
+Giraffe,Gir,herbivore,Artiodactyla,vu,4.6,0.6,,19.4,,529
+Goat,Goa,herbivore,Artiodactyla,lc,5.3,0.6,,18.7,0.115,33.5
+Golden hamster,Gol,herbivore,Rodentia,en,14.3,3.1,0.2,9.7,0.001,0.12
+Gorilla,Gor,herbivore,Primates,cd,12.0,,,12.0,,207
+Gray seal,Gra,carnivore,Carnivora,lc,6.2,1.5,,17.8,0.325,85
+Gray wolf,Gra,carnivore,Carnivora,lc,13.0,,,11.0,,36.3
+Ground squirrel,Gro,herbivore,Rodentia,lc,13.8,3.4,0.22,10.2,0.004,0.101
+Guinea pig,Gui,herbivore,Rodentia,lc,9.4,0.8,0.22,14.6,0.0055,0.728
+Horse,Hor,herbivore,Perissodactyla,lc,2.9,0.6,1.0,21.1,0.655,521
+Human,Hum,omnivore,Primates,lc,8.0,1.9,1.5,16.0,1.32,62
+Jaguar,Jag,carnivore,Carnivora,nt,10.4,,,13.6,0.157,100
+Kangaroo,Kan,herbivore,Diprotodontia,lc,17.9,,,6.1,,35
+Lesser short-tailed shrew,Les,omnivore,Insectivora,lc,9.1,1.4,0.15,14.9,0.00014,0.005
+Little brown bat,Lit,insectivore,Chiroptera,lc,19.9,2.0,0.2,4.1,0.00025,0.01
+Long-nosed armadillo,Lon,insectivore,Cingulata,lc,17.4,3.1,0.38,6.6,0.0081,3.5
+Macaque,Mac,omnivore,Primates,lc,10.1,1.2,0.79,13.9,0.179,6.8
+Mountain beaver,Mou,herbivore,Rodentia,nt,8.4,2.4,,15.6,0.0123,1.35
+Mouse,Mou,herbivore,Rodentia,lc,12.5,1.4,0.18,11.5,0.0004,0.023
+Musk shrew,Mus,omnivore,Insectivora,lc,12.8,2.0,0.18,11.2,0.00033,0.048
+North american opossum,Nor,omnivore,Didelphimorphia,lc,18.0,4.9,0.33,6.0,0.0063,1.7
+Northern fur seal,Nor,carnivore,Carnivora,vu,8.7,1.4,0.38,15.3,0.325,20.49
+Owl monkey,Owl,omnivore,Primates,lc,17.0,1.8,,7.0,0.0155,0.48
+Patas monkey,Pat,omnivore,Primates,nt,10.4,1.1,,13.6,0.115,10
+Phalarope,Pha,carnivore,Charadriiformes,lc,10.6,0.9,,13.4,,0.06
+Pig,Pig,omnivore,Artiodactyla,lc,9.1,2.4,0.5,14.9,0.18,86
+Pilot whale,Pil,carnivore,Cetacea,lc,2.7,0.1,,21.3,,800
+Potto,Pot,omnivore,Primates,lc,11.0,,,13.0,,1.1
+Prairie dog,Pra,herbivore,Rodentia,lc,14.9,2.7,,9.1,,1.4
+Rabbit,Rab,herbivore,Lagomorpha,lc,8.4,0.9,0.42,15.6,0.0121,2.5
+Raccoon,Rac,omnivore,Carnivora,lc,12.5,2.4,0.38,11.5,0.0394,4.29
+Rat,Rat,herbivore,Rodentia,lc,13.0,2.6,0.12,11.0,0.0019,0.32
+Red fox,Red,carnivore,Carnivora,lc,9.8,2.4,0.35,14.2,0.0504,4.23
+Roe deer,Roe,herbivore,Artiodactyla,lc,3.0,,,21.0,0.0982,14.8
+Round-tailed muskrat,Rou,herbivore,Rodentia,lc,14.6,,,9.4,,0.22
+Sheep,She,herbivore,Artiodactyla,lc,3.8,0.6,,20.2,0.175,55.5
+Slow loris,Slo,omnivore,Primates,vu,11.0,,,13.0,,1.4
+Star-nosed mole,Sta,insectivore,Insectivora,lc,10.3,2.2,,13.7,0.001,0.06
+Tenrec,Ten,omnivore,Afrosoricida,lc,15.6,2.3,,8.4,0.0026,0.9
+Thick-tailed opposum,Thi,carnivore,Didelphimorphia,lc,19.4,6.6,,4.6,,0.37
+Tree hyrax,Tre,herbivore,Hyracoidea,lc,5.3,0.5,,18.7,,2.0
+Tree shrew,Tre,omnivore,Scandentia,lc,8.9,2.6,0.23,15.1,0.0025,0.104
+Vervet,Ver,omnivore,Primates,lc,9.5,,,14.5,,4.19
+Water opossum,Wat,carnivore,Didelphimorphia,lc,16.3,,,7.7,,3.5
+Arctic fox,Arc,carnivore,Carnivora,lc,12.5,,,11.5,,3.38
+Baboon,Bab,omnivore,Primates,lc,9.4,1.0,0.67,14.6,0.18,25
+Beaver,Bea,herbivore,Rodentia,lc,14.4,2.2,,9.6,0.045,20
+Bengal tiger,Ben,carnivore,Carnivora,en,15.8,,,8.2,0.325,162.6
+Black bear,Bla,omnivore,Carnivora,lc,7.7,,,16.3,0.325,119
+Capybara,Cap,herbivore,Rodentia,lc,6.5,,,17.5,0.075,50
+Caribou,Car,herbivore,Artiodactyla,vu,4.5,0.6,,19.5,0.325,95
+Cheetah,Che,carnivore,Carnivora,vu,12.1,,,11.9,0.125,50
+Coyote,Coy,omnivore,Carnivora,lc,10.9,2.0,,13.1,0.075,15
+Desert hedgehog,Des,insectivore,Insectivora,lc,10.3,2.7,,13.7,0.0024,0.55
+Fennec fox,Fen,omnivore,Carnivora,lc,11.5,2.2,,12.5,0.04,1.42
+Flying squirrel,Fly,herbivore,Rodentia,lc,14.9,1.5,0.16,9.1,0.004,0.14
+Grizzly bear,Gri,omnivore,Carnivora,lc,10.0,,,14.0,0.235,899
+Lemur,Lem,omnivore,Primates,vu,16.0,,,8.0,0.0213,1.67
+Leopard,Leo,carnivore,Carnivora,vu,10.5,,,13.5,0.157,52
+Lion,Lio,carnivore,Carnivora,vu,13.5,,,10.5,0.24,190
+Meerkat,Mee,carnivore,Carnivora,lc,12.8,1.9,,11.2,0.012,0.73
+Polar bear,Pol,carnivore,Carnivora,vu,7.8,,,16.2,0.5,385
+Porcupine,Por,herbivore,Rodentia,lc,17.0,3.6,,7.0,0.02,12
+Red panda,Red,omnivore,Carnivora,en,10.9,1.8,,13.1,0.12,6
+Snow leopard,Sno,carnivore,Carnivora,vu,11.5,,,12.5,0.125,50
+Squirrel monkey,Squ,omnivore,Primates,lc,9.6,1.4,,14.4,0.02,0.743
+Wombat,Wom,herbivore,Vombatiformes,lc,14.5,,,9.5,0.032,26
