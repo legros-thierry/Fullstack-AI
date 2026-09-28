@@ -1,0 +1,12 @@
+order_id,customer_id,order_date,amount_eur,product
+101,1,2024-08-01,42.50,Espresso Blend
+102,2,2024-08-03,68.00,Filter Box
+103,1,2024-08-15,42.50,Espresso Blend
+104,3,2024-08-20,55.00,Decaf Pack
+105,4,2024-09-02,30.00,Single Origin
+106,2,2024-09-10,68.00,Filter Box
+107,6,2024-09-18,120.00,Premium Box
+108,7,2024-10-01,42.50,Espresso Blend
+109,1,2024-10-05,55.00,Decaf Pack
+110,8,2024-10-12,30.00,Single Origin
+111,6,2024-10-20,68.00,Filter Box

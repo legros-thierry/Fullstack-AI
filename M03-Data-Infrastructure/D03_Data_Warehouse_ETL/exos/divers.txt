@@ -1,0 +1,2 @@
+db-instance: brewly-db.c9sy6s6ecvvp.eu-north-1.rds.amazonaws.com
+
