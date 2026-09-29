@@ -1,0 +1,2 @@
+employee_id,team,seniority_level,base_salary,bonus,status,contract_type
+EMP-00999,Data & Analytics,senior,-15000.00,2000.00,active,GHOST
