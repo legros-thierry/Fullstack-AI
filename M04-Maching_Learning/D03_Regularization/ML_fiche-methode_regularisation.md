@@ -17,8 +17,8 @@ flowchart LR
    ├─ soit améliorer le modèle      → jouer sur les données / les variables
    └─ soit PÉNALISER le modèle      → l'empêcher d'apprendre « trop » sur le train
                                       = RÉGULARISATION
-          ├─ jouer sur le NOMBRE de variables     → 🟧 Lasso (β = 0)
-          └─ jouer sur leur IMPORTANCE            → 🟦 Ridge (β rétrécis)
+          ├─ jouer sur le NOMBRE de variables     → 🟧 Lasso (éteint des β)
+          └─ jouer sur leur IMPORTANCE            → 🟦 Ridge (réduit les β uniformément)
 ```
 
 ## 🧱 Point de départ commun : la fonction de coût
@@ -43,12 +43,31 @@ yi_pred = β₀ + β₁·x1 + … + βₙ·xn         notation matricielle : X·
 > `f̂` est donc une **variable aléatoire** : on raisonne sur le `f̂` « **en moyenne** ».
 > Le vrai `f` recherché = la fonction qui représente la distribution statistique de la donnée.
 
+**Idée** : on regarde la fonction de coût **en moyenne** (espérance `E[ ]` ≈ moyenne) → `E[(Y − f̂)²]`.
+
 ```
-Erreur attendue = biais² + variance + σ²
-                  │         │          └ bruit irréductible (non prédictible depuis X)
-                  │         └ variance : f̂ change beaucoup si X_train change
-                  └ biais : le f̂ moyen s'écarte du vrai f
+Hypothèses   Y = f + ε        f = vraie fonction, constante → Var(f) = 0, Cov(f, ε) = 0
+             E[ε] = 0         → Var(Y) = Var(ε) = σ²
+             μ = E[f̂]         le f̂ « moyen »
+
+Étape 1      E[(Y − f̂)²] = E[(ε + (f − f̂))²]
+                         = E[ε²] + 2·E[ε·(f − f̂)] + E[(f − f̂)²]      (linéarité de E)
+                         = σ²    +        0         + E[(f − f̂)²]
+
+Étape 2      f − f̂ = (f − μ) + (μ − f̂)           on ajoute et retire μ
+
+Résultat     E[(Y − f̂)²] =   σ²    +    (f − μ)²    +    E[(f̂ − μ)²]
+                            bruit       biais²           variance de f̂
 ```
+
+| Terme | Signification | Dépend de nous ? |
+|---|---|---|
+| 🔊 Bruit `σ²` | Part de Y imprévisible à partir de X | ❌ on ne s'en occupe pas |
+| 🎯 Biais² `(f − μ)²` | Écart entre le vrai `f` et le `f̂` moyen | ✅ dépend de notre estimateur |
+| 🎢 Variance `E[(f̂ − μ)²]` | Combien `f̂` bouge quand X_train change | ✅ dépend de notre estimateur |
+
+➡️ Les 3 termes sont **positifs** : minimiser le coût moyen = minimiser biais et variance.
+⚠️ Mais baisser l'un fait monter l'autre → **dilemme biais-variance** : il faut un compromis. C'est ce que règle `α`.
 
 | | 😴 Biais élevé | ✅ Compromis | 🤯 Variance élevée |
 |---|---|---|---|
@@ -64,6 +83,56 @@ Erreur attendue = biais² + variance + σ²
 | Effet sur les β | Aucune contrainte → β énormes si p grand | **Rétrécit** tous les β vers 0, sans les annuler | Met des β **exactement à 0** = sélection de variables |
 | Quand l'utiliser | n ≫ p | Beaucoup de features portant chacune un peu de signal · stabilité | Peu de features utiles (`s ≪ n ≪ p`) · liste courte à expliquer au métier |
 | sklearn | `LinearRegression()` | `Ridge(alpha=…)` | `Lasso(alpha=…)` |
+| En une phrase | – | Réduit l'importance des β **uniformément** | **Éteint** les β un à un |
+
+### 🟦 Ridge : comment λ agit sur biais et variance
+
+```
+avant   coût     = ‖Y − X·β‖²
+Ridge   new_coût = ‖Y − X·β‖²  +  λ · Σ βᵢ²       ← terme de pénalisation
+                                  i=1..n
+
+Effet de λ (expressions simplifiées vues en cours) :
+   variance(λ) = Variance(β_lin) / (1 + λ)²     → tend vers 0 quand λ ↑
+   biais(λ)    = λ / (1 + λ) · Biais(β_lin)     → le facteur tend vers 1 quand λ ↑
+```
+
+| Si λ ↑ | Pourquoi |
+|---|---|
+| Variance ↓ | Formule ci-dessus : divisée par (1 + λ)² |
+| β écrasés uniformément | Le terme `λ·Σβᵢ²` pèse lourd dans le coût → le minimiser impose des β petits |
+| Biais ↑ | β trop petits → `f̂` prédit moins bien → `μ` s'éloigne du vrai `f` |
+
+➡️ Il faut trouver **le bon λ** qui optimise le dilemme biais-variance → grid search.
+
+### 🟧 Lasso
+
+```
+new_coût = ‖Y − X·β‖²  +  λ · Σ |βᵢ|        ← valeur absolue au lieu du carré
+```
+
+Même logique que Ridge (λ ↑ → variance ↓, biais ↑), mais les β tombent **à 0** un par un.
+
+### 📐 Pourquoi Lasso met des β à 0 : la géométrie (2 variables)
+
+```
+ Ridge : β₁² + β₂² ≤ budget            Lasso : |β₁| + |β₂| ≤ budget
+         → un CERCLE                            → un CARRÉ (losange) avec des coins
+
+              β₂                                     β₂
+              │   ___                                │
+            ╭─┼─╮/  ellipses du coût OLS             ◇  ← l'ellipse touche souvent
+           │  ┼  │                                  ╱│╲    un COIN, sur un axe
+            ╰─┼─╯                                ──◇─┼─◇── β₁   → β₁ = 0
+         ─────┼───── β₁                              ╲│╱
+              │                                      ◇
+   contact n'importe où sur le bord            contact sur un coin = un β nul
+```
+
+| | λ grandit → |
+|---|---|
+| Ridge | Le **cercle** rétrécit → tous les β diminuent ensemble |
+| Lasso | Le **carré** rétrécit → la solution tombe sur ses coins → des β = 0 |
 
 | α | Effet |
 |---|---|
