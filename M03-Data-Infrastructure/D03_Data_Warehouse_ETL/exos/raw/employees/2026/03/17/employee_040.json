@@ -1,0 +1,9 @@
+{
+  "employeeId": "EMP-04240",
+  "team": "People Operations",
+  "seniorityLevel": "junior",
+  "baseSalary": "35828.00 EUR",
+  "bonus": "2335.00 EUR",
+  "status": "inactive",
+  "contractType": "CONTRACT"
+}

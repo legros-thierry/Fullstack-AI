@@ -1,0 +1,9 @@
+{
+  "employeeId": "EMP-04219",
+  "team": "Engineering",
+  "seniorityLevel": "lead",
+  "baseSalary": "92978.00 EUR",
+  "bonus": "8385.00 EUR",
+  "status": "inactive",
+  "contractType": "PERMANENT"
+}

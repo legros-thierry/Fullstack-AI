@@ -1,0 +1,9 @@
+{
+  "employeeId": "EMP-04228",
+  "team": "Engineering",
+  "seniorityLevel": "mid",
+  "baseSalary": "60809.00 EUR",
+  "bonus": "4446.00 EUR",
+  "status": "inactive",
+  "contractType": "PERMANENT"
+}

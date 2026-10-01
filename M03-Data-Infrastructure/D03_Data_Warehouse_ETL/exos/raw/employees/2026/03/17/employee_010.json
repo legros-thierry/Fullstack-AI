@@ -1,0 +1,9 @@
+{
+  "employeeId": "EMP-04210",
+  "team": "Sales",
+  "seniorityLevel": "junior",
+  "baseSalary": "38814.00 EUR",
+  "bonus": "2774.00 EUR",
+  "status": "active",
+  "contractType": "PERMANENT"
+}

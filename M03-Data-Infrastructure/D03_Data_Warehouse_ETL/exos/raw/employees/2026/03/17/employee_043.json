@@ -1,0 +1,9 @@
+{
+  "employeeId": "EMP-04243",
+  "team": "Marketing",
+  "seniorityLevel": "senior",
+  "baseSalary": "81861.00 EUR",
+  "bonus": "7853.00 EUR",
+  "status": "inactive",
+  "contractType": "INTERN"
+}

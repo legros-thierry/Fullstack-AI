@@ -1,0 +1,9 @@
+{
+  "employeeId": "EMP-04250",
+  "team": "Marketing",
+  "seniorityLevel": "mid",
+  "baseSalary": "61004.00 EUR",
+  "bonus": "3728.00 EUR",
+  "status": "active",
+  "contractType": "INTERN"
+}

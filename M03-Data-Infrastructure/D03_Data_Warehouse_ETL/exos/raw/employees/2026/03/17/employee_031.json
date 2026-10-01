@@ -1,0 +1,9 @@
+{
+  "employeeId": "EMP-04231",
+  "team": "People Operations",
+  "seniorityLevel": "lead",
+  "baseSalary": "93965.00 EUR",
+  "bonus": "10030.00 EUR",
+  "status": "active",
+  "contractType": "PERMANENT"
+}

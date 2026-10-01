@@ -1,0 +1,9 @@
+{
+  "employeeId": "EMP-04211",
+  "team": "Finance",
+  "seniorityLevel": "senior",
+  "baseSalary": "73329.00 EUR",
+  "bonus": "6516.00 EUR",
+  "status": "active",
+  "contractType": "CONTRACT"
+}

@@ -1,0 +1,9 @@
+{
+  "employeeId": "EMP-04221",
+  "team": "Marketing",
+  "seniorityLevel": "senior",
+  "baseSalary": "68376.00 EUR",
+  "bonus": "7786.00 EUR",
+  "status": "active",
+  "contractType": "CONTRACT"
+}
