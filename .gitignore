@@ -12,3 +12,6 @@ wheels/
 *accessKeys*
 *.pem
 
+# macOS
+.DS_Store
+**/.DS_Store
