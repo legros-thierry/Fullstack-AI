@@ -15,15 +15,15 @@ members = [
 
 [[package]]
 name = "aifs-hints"
-version = "0.2.0"
+version = "0.3.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "ipython" },
     { name = "pandas" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/32/4b/a725d710173a7a3ad7f83d5d4232b6d089b7f7f119fdbc83ff1308ba2ac0/aifs_hints-0.2.0.tar.gz", hash = "sha256:6ad8a7387e7a25a8623ac7d38c52e5cfbbb8a5f011dd703b5cd758cc2a5f7036", size = 13903, upload-time = "2026-09-29T22:54:20.419Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/9c/28/6e49f5e0a91650d584a598eaf85def4cba4a77f09d54cc5678352c90e8c4/aifs_hints-0.3.1.tar.gz", hash = "sha256:b6135e7fbe94842faf2ac99c290f4bae0bf0ef998d38378acd466853bc70b944", size = 21524, upload-time = "2026-09-30T22:00:04.81Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/b2/99/af1536bcb90b72b51f7d3a5a072e633ea8b96b2093a335159d5d0ec0b4ec/aifs_hints-0.2.0-py3-none-any.whl", hash = "sha256:e0a1ee9b4809e13587068f135f1a7717595fa52764db7c1435f9d3e082e793fe", size = 13065, upload-time = "2026-09-29T22:54:19.163Z" },
+    { url = "https://files.pythonhosted.org/packages/8b/50/8669af85c74c4658373ac2ff6d4f322d2175760b7868bbd6563b69d30729/aifs_hints-0.3.1-py3-none-any.whl", hash = "sha256:4cdbc7a159164e4eab7d0ab53b2800520d1726e2afc99928507ce9327623e5b7", size = 21958, upload-time = "2026-09-30T22:00:03.328Z" },
 ]
 
 [[package]]
@@ -441,7 +441,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "aifs-hints", specifier = ">=0.2.0" },
+    { name = "aifs-hints", specifier = ">=0.3.1" },
     { name = "boto3", specifier = ">=1.43.100" },
     { name = "dotenv", specifier = ">=0.9.9" },
     { name = "matplotlib", specifier = ">=3.11.1" },

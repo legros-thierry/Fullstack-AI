@@ -1,0 +1,300 @@
+{
+  "ML · Imports de base": {
+    "scope": "python",
+    "prefix": "ml-imports",
+    "description": "Imports pandas, numpy, sklearn (preprocessing, modèles, métriques), plotly",
+    "body": [
+      "import pandas as pd",
+      "import numpy as np",
+      "import plotly.express as px",
+      "",
+      "from sklearn.model_selection import train_test_split, cross_val_score, GridSearchCV",
+      "from sklearn.pipeline import Pipeline",
+      "from sklearn.compose import ColumnTransformer",
+      "from sklearn.impute import SimpleImputer",
+      "from sklearn.preprocessing import StandardScaler, OneHotEncoder, LabelEncoder, PolynomialFeatures",
+      "from sklearn.linear_model import LinearRegression, Ridge, Lasso, LogisticRegression",
+      "from sklearn.metrics import r2_score, accuracy_score",
+      "$0"
+    ]
+  },
+
+  "ML · Charger + EDA rapide": {
+    "scope": "python",
+    "prefix": "ml-load",
+    "description": "read_csv, shape, describe, % de NaN par colonne",
+    "body": [
+      "${1:dataset} = pd.read_csv('${2:src/data.csv}')",
+      "print(${1:dataset}.shape)",
+      "display(${1:dataset}.head())",
+      "display(${1:dataset}.describe(include='all'))",
+      "display((${1:dataset}.isnull().mean() * 100).round(1).sort_values(ascending=False))",
+      "$0"
+    ]
+  },
+
+  "ML · % de valeurs manquantes": {
+    "scope": "python",
+    "prefix": "ml-nan",
+    "description": "% de NaN par colonne, trié",
+    "body": [
+      "(${1:dataset}.isnull().mean() * 100).round(1).sort_values(ascending=False)$0"
+    ]
+  },
+
+  "ML · Supprimer les colonnes Unnamed": {
+    "scope": "python",
+    "prefix": "ml-unnamed",
+    "description": "Retire les colonnes 'Unnamed: x' (index sauvegardé dans le CSV)",
+    "body": [
+      "cols_unnamed = [col for col in ${1:dataset}.columns if col.startswith('Unnamed')]",
+      "${1:dataset} = ${1:dataset}.drop(columns=cols_unnamed)",
+      "$0"
+    ]
+  },
+
+  "ML · Supprimer des colonnes": {
+    "scope": "python",
+    "prefix": "ml-dropcols",
+    "description": "Drop colonnes inutiles : ID, constante, > 60 % NaN, colinéaires",
+    "body": [
+      "useless_cols = [${1:'id'}]",
+      "${2:dataset} = ${2:dataset}.drop(columns=useless_cols)",
+      "$0"
+    ]
+  },
+
+  "ML · Outliers (masque qui garde les NaN)": {
+    "scope": "python",
+    "prefix": "ml-outlier",
+    "description": "Filtre une condition en conservant les NaN (l'imputer s'en chargera)",
+    "body": [
+      "to_keep = (${1:dataset}['${2:Age}'] ${3:> 0}) | (${1:dataset}['${2:Age}'].isnull())",
+      "${1:dataset} = ${1:dataset}.loc[to_keep, :]",
+      "print('Lignes restantes :', ${1:dataset}.shape[0])",
+      "$0"
+    ]
+  },
+
+  "ML · Corrélations (heatmap)": {
+    "scope": "python",
+    "prefix": "ml-corr",
+    "description": "Matrice de corrélation des colonnes numériques",
+    "body": [
+      "corr = ${1:dataset}.corr(numeric_only=True).round(2)",
+      "px.imshow(corr, text_auto=True, color_continuous_scale='RdBu_r', zmin=-1, zmax=1).show()",
+      "$0"
+    ]
+  },
+
+  "ML · Séparer X / Y": {
+    "scope": "python",
+    "prefix": "ml-xy",
+    "description": "Y = cible, X = tout le reste",
+    "body": [
+      "target = '${1:Salary}'",
+      "${2:dataset} = ${2:dataset}.dropna(subset=[target])",
+      "Y = ${2:dataset}[target]",
+      "X = ${2:dataset}.drop(columns=[target])",
+      "$0"
+    ]
+  },
+
+  "ML · Détecter colonnes num / cat": {
+    "scope": "python",
+    "prefix": "ml-types",
+    "description": "Listes numeric_features / categorical_features automatiques",
+    "body": [
+      "numeric_features = X.select_dtypes(include='number').columns.tolist()",
+      "categorical_features = X.select_dtypes(exclude='number').columns.tolist()",
+      "print('Num :', numeric_features)",
+      "print('Cat :', categorical_features)",
+      "$0"
+    ]
+  },
+
+  "ML · Train / test split": {
+    "scope": "python",
+    "prefix": "ml-split",
+    "description": "train_test_split AVANT tout fit",
+    "body": [
+      "X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=${1:0.2}, random_state=${2:0}${3:, stratify=Y})",
+      "$0"
+    ]
+  },
+
+  "ML · Preprocessor (ColumnTransformer complet)": {
+    "scope": "python",
+    "prefix": "ml-preproc",
+    "description": "Briques → pipelines num / cat → ColumnTransformer",
+    "body": [
+      "# Briques",
+      "numeric_imputer = SimpleImputer(strategy='${1|median,mean|}')",
+      "standard_scaler = StandardScaler()",
+      "categoric_imputer = SimpleImputer(strategy='most_frequent')",
+      "one_hot_encoder = OneHotEncoder(drop='first', handle_unknown='ignore')",
+      "",
+      "# Pipelines",
+      "numeric_pipeline = Pipeline([",
+      "    ('num_imputer', numeric_imputer),",
+      "    ('scaler', standard_scaler),",
+      "])",
+      "categoric_pipeline = Pipeline([",
+      "    ('cat_imputer', categoric_imputer),",
+      "    ('encoder', one_hot_encoder),",
+      "])",
+      "",
+      "# Aiguillage",
+      "preprocessor = ColumnTransformer([",
+      "    ('num', numeric_pipeline, numeric_features),",
+      "    ('cat', categoric_pipeline, categorical_features),",
+      "])",
+      "$0"
+    ]
+  },
+
+  "ML · Appliquer le preprocessor": {
+    "scope": "python",
+    "prefix": "ml-transform",
+    "description": "fit_transform sur train, transform seul sur test (jamais de fit sur test)",
+    "body": [
+      "X_train_p = preprocessor.fit_transform(X_train)",
+      "X_test_p = preprocessor.transform(X_test)",
+      "print(X_train_p[0:5])  # np.array → pas de .head()",
+      "$0"
+    ]
+  },
+
+  "ML · Encoder Y catégorielle": {
+    "scope": "python",
+    "prefix": "ml-labelenc",
+    "description": "LabelEncoder : fit sur train, transform sur test",
+    "body": [
+      "label_encoder = LabelEncoder()",
+      "Y_train = label_encoder.fit_transform(Y_train)",
+      "Y_test = label_encoder.transform(Y_test)",
+      "$0"
+    ]
+  },
+
+  "ML · Polynomial features": {
+    "scope": "python",
+    "prefix": "ml-poly",
+    "description": "Ajoute puissances et interactions (après preprocessing)",
+    "body": [
+      "poly = PolynomialFeatures(degree=${1:2}, include_bias=False)",
+      "X_train_p = poly.fit_transform(X_train_p)",
+      "X_test_p = poly.transform(X_test_p)",
+      "print('Nb de colonnes :', X_train_p.shape[1])",
+      "$0"
+    ]
+  },
+
+  "ML · Régression linéaire + R²": {
+    "scope": "python",
+    "prefix": "ml-linreg",
+    "description": "LinearRegression, fit, R² train / test",
+    "body": [
+      "${1:model} = LinearRegression()",
+      "${1:model}.fit(X_train_p, Y_train)",
+      "print(f'R² train : {${1:model}.score(X_train_p, Y_train):.3f}')",
+      "print(f'R² test  : {${1:model}.score(X_test_p, Y_test):.3f}')",
+      "$0"
+    ]
+  },
+
+  "ML · R² train / test + écart": {
+    "scope": "python",
+    "prefix": "ml-r2",
+    "description": "Diagnostic over / underfit",
+    "body": [
+      "r2_train = ${1:model}.score(${2:X_train_p}, Y_train)",
+      "r2_test = ${1:model}.score(${3:X_test_p}, Y_test)",
+      "print(f'R² train : {r2_train:.3f} | R² test : {r2_test:.3f} | écart : {r2_train - r2_test:.3f}')",
+      "$0"
+    ]
+  },
+
+  "ML · Coefficients triés": {
+    "scope": "python",
+    "prefix": "ml-coefs",
+    "description": "β par colonne, triés par valeur absolue, + bar chart",
+    "body": [
+      "coefs = pd.DataFrame({'coef': ${1:model}.coef_}, index=${2:preprocessor}.get_feature_names_out())",
+      "coefs = coefs.reindex(coefs['coef'].abs().sort_values().index)",
+      "px.bar(coefs, x='coef', orientation='h').show()",
+      "$0"
+    ]
+  },
+
+  "ML · Ridge": {
+    "scope": "python",
+    "prefix": "ml-ridge",
+    "description": "Ridge (L2) : réduit tous les β",
+    "body": [
+      "${1:ridge} = Ridge(alpha=${2:1.0})",
+      "${1:ridge}.fit(X_train_p, Y_train)",
+      "print(f'R² train : {${1:ridge}.score(X_train_p, Y_train):.3f} | R² test : {${1:ridge}.score(X_test_p, Y_test):.3f}')",
+      "$0"
+    ]
+  },
+
+  "ML · Lasso": {
+    "scope": "python",
+    "prefix": "ml-lasso",
+    "description": "Lasso (L1) : met des β à 0",
+    "body": [
+      "${1:lasso} = Lasso(alpha=${2:1.0}, max_iter=10000)",
+      "${1:lasso}.fit(X_train_p, Y_train)",
+      "print(f'R² train : {${1:lasso}.score(X_train_p, Y_train):.3f} | R² test : {${1:lasso}.score(X_test_p, Y_test):.3f}')",
+      "print('β à zéro :', (${1:lasso}.coef_ == 0).sum(), '/', ${1:lasso}.coef_.size)",
+      "$0"
+    ]
+  },
+
+  "ML · Validation croisée": {
+    "scope": "python",
+    "prefix": "ml-cv",
+    "description": "cross_val_score : moyenne + écart-type",
+    "body": [
+      "scores = cross_val_score(${1:Ridge()}, X_train_p, Y_train, cv=${2:5})",
+      "print(f'R² CV : {scores.mean():.3f} ± {scores.std():.3f}')",
+      "$0"
+    ]
+  },
+
+  "ML · Grid search": {
+    "scope": "python",
+    "prefix": "ml-grid",
+    "description": "GridSearchCV sur alpha (échelle log), meilleur modèle, score test",
+    "body": [
+      "params = {'alpha': [0.01, 0.1, 1, 10, 100, 1000]}",
+      "gridsearch = GridSearchCV(${1:Ridge()}, param_grid=params, cv=${2:5}, n_jobs=-1)",
+      "gridsearch.fit(X_train_p, Y_train)",
+      "print('Meilleur alpha :', gridsearch.best_params_)",
+      "print(f'R² CV  : {gridsearch.best_score_:.3f}')",
+      "print(f'R² test : {gridsearch.score(X_test_p, Y_test):.3f}')",
+      "# ⚠️ si le meilleur alpha est au bord de la grille → élargir la grille",
+      "$0"
+    ]
+  },
+
+  "ML · Pipeline complet + grid search (version propre)": {
+    "scope": "python",
+    "prefix": "ml-pipegrid",
+    "description": "Preprocessing + modèle dans un seul Pipeline, grid search sans fuite",
+    "body": [
+      "full_pipeline = Pipeline([",
+      "    ('pre', preprocessor),",
+      "    ('model', ${1:Ridge()}),",
+      "])",
+      "params = {'model__alpha': [0.01, 0.1, 1, 10, 100, 1000]}",
+      "gridsearch = GridSearchCV(full_pipeline, param_grid=params, cv=${2:5}, n_jobs=-1)",
+      "gridsearch.fit(X_train, Y_train)  # X brut : le pipeline fait le preprocessing",
+      "print('Meilleur alpha :', gridsearch.best_params_)",
+      "print(f'R² CV  : {gridsearch.best_score_:.3f}')",
+      "print(f'R² test : {gridsearch.score(X_test, Y_test):.3f}')",
+      "$0"
+    ]
+  }
+}

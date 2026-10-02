@@ -1,0 +1,221 @@
+# 🛡️ Fiche méthode · Régularisation, validation croisée, grid search (sklearn)
+
+> Problème : trop de features (parfois **p > n**) → la régression linéaire « colle » au train → **overfitting**.
+> Solution : **pénaliser la taille des β** (Ridge / Lasso) et choisir la force de la pénalité `α` par **validation croisée**.
+
+```mermaid
+flowchart LR
+  A[🧹 Preprocessing] --> B[🧬 PolynomialFeatures<br>12 → 454 col.] --> C[📉 OLS<br>train 0.94 · test 0.46] --> D[📏 cross_val_score<br>Ridge] --> E[🔎 GridSearchCV<br>meilleur α] --> F[📊 test<br>train 0.92 · test 0.88]
+  style C fill:#FCEBEB,stroke:#A32D2D
+  style E fill:#FAEEDA,stroke:#854F0B
+```
+
+## 🤔 Pourquoi régulariser ?
+
+```
+Évaluation du modèle → underfitting / overfitting
+   ├─ soit améliorer le modèle      → jouer sur les données / les variables
+   └─ soit PÉNALISER le modèle      → l'empêcher d'apprendre « trop » sur le train
+                                      = RÉGULARISATION
+          ├─ jouer sur le NOMBRE de variables     → 🟧 Lasso (éteint des β)
+          └─ jouer sur leur IMPORTANCE            → 🟦 Ridge (réduit les β uniformément)
+```
+
+## 🧱 Point de départ commun : la fonction de coût
+
+```
+Coût = min   Σ (yi_true − yi_pred)²      = distance de Y vrai à Y prédit
+      Betas i=1..n
+
+yi_pred = β₀ + β₁·x1 + … + βₙ·xn         notation matricielle : X·β
+
+      ┌ 1  x1 … xn ┐          ┌ β₀ ┐
+  X = │ ⋮   ⋮      ⋮ │    β =  │ β₁ │      →   Coût = ‖Y − X·β‖²
+      └ 1  x1 … xn ┘          │ ⋮  │
+                               └ βₙ ┘
+```
+
+➡️ Ridge et Lasso **gardent ce coût** et y **ajoutent une pénalité** sur les β.
+
+## ⚖️ Biais vs variance
+
+> `f̂` (= `f_approx` = `Y_pred`) est entraîné sur **X_train** → un autre train donnerait un autre `f̂`.
+> `f̂` est donc une **variable aléatoire** : on raisonne sur le `f̂` « **en moyenne** ».
+> Le vrai `f` recherché = la fonction qui représente la distribution statistique de la donnée.
+
+**Idée** : on regarde la fonction de coût **en moyenne** (espérance `E[ ]` ≈ moyenne) → `E[(Y − f̂)²]`.
+
+```
+Hypothèses   Y = f + ε        f = vraie fonction, constante → Var(f) = 0, Cov(f, ε) = 0
+             E[ε] = 0         → Var(Y) = Var(ε) = σ²
+             μ = E[f̂]         le f̂ « moyen »
+
+Étape 1      E[(Y − f̂)²] = E[(ε + (f − f̂))²]
+                         = E[ε²] + 2·E[ε·(f − f̂)] + E[(f − f̂)²]      (linéarité de E)
+                         = σ²    +        0         + E[(f − f̂)²]
+
+Étape 2      f − f̂ = (f − μ) + (μ − f̂)           on ajoute et retire μ
+
+Résultat     E[(Y − f̂)²] =   σ²    +    (f − μ)²    +    E[(f̂ − μ)²]
+                            bruit       biais²           variance de f̂
+```
+
+| Terme | Signification | Dépend de nous ? |
+|---|---|---|
+| 🔊 Bruit `σ²` | Part de Y imprévisible à partir de X | ❌ on ne s'en occupe pas |
+| 🎯 Biais² `(f − μ)²` | Écart entre le vrai `f` et le `f̂` moyen | ✅ dépend de notre estimateur |
+| 🎢 Variance `E[(f̂ − μ)²]` | Combien `f̂` bouge quand X_train change | ✅ dépend de notre estimateur |
+
+➡️ Les 3 termes sont **positifs** : minimiser le coût moyen = minimiser biais et variance.
+⚠️ Mais baisser l'un fait monter l'autre → **dilemme biais-variance** : il faut un compromis. C'est ce que règle `α`.
+
+| | 😴 Biais élevé | ✅ Compromis | 🤯 Variance élevée |
+|---|---|---|---|
+| Situation | Underfitting | Bien calibré | Overfitting |
+| Score | train ≈ test ≈ faible | train ≈ test, élevés | train ≫ test |
+| Côté α | α trop grand | α optimal | α ≈ 0 (= OLS) |
+
+## 🧮 Ridge vs Lasso
+
+| | Régression linéaire (OLS) | 🟦 Ridge · L2 | 🟧 Lasso · L1 |
+|---|---|---|---|
+| Fonction de coût | `‖y − Xβ‖²` | `‖y − Xβ‖² + α·Σβᵢ²` | `‖y − Xβ‖² + α·Σ\|βᵢ\|` |
+| Effet sur les β | Aucune contrainte → β énormes si p grand | **Rétrécit** tous les β vers 0, sans les annuler | Met des β **exactement à 0** = sélection de variables |
+| Quand l'utiliser | n ≫ p | Beaucoup de features portant chacune un peu de signal · stabilité | Peu de features utiles (`s ≪ n ≪ p`) · liste courte à expliquer au métier |
+| sklearn | `LinearRegression()` | `Ridge(alpha=…)` | `Lasso(alpha=…)` |
+| En une phrase | – | Réduit l'importance des β **uniformément** | **Éteint** les β un à un |
+
+### 🟦 Ridge : comment λ agit sur biais et variance
+
+```
+avant   coût     = ‖Y − X·β‖²
+Ridge   new_coût = ‖Y − X·β‖²  +  λ · Σ βᵢ²       ← terme de pénalisation
+                                  i=1..n
+
+Effet de λ (expressions simplifiées vues en cours) :
+   variance(λ) = Variance(β_lin) / (1 + λ)²     → tend vers 0 quand λ ↑
+   biais(λ)    = λ / (1 + λ) · Biais(β_lin)     → le facteur tend vers 1 quand λ ↑
+```
+
+| Si λ ↑ | Pourquoi |
+|---|---|
+| Variance ↓ | Formule ci-dessus : divisée par (1 + λ)² |
+| β écrasés uniformément | Le terme `λ·Σβᵢ²` pèse lourd dans le coût → le minimiser impose des β petits |
+| Biais ↑ | β trop petits → `f̂` prédit moins bien → `μ` s'éloigne du vrai `f` |
+
+➡️ Il faut trouver **le bon λ** qui optimise le dilemme biais-variance → grid search.
+
+### 🟧 Lasso
+
+```
+new_coût = ‖Y − X·β‖²  +  λ · Σ |βᵢ|        ← valeur absolue au lieu du carré
+```
+
+Même logique que Ridge (λ ↑ → variance ↓, biais ↑), mais les β tombent **à 0** un par un.
+
+### 📐 Pourquoi Lasso met des β à 0 : la géométrie (2 variables)
+
+```
+ Ridge : β₁² + β₂² ≤ budget            Lasso : |β₁| + |β₂| ≤ budget
+         → un CERCLE                            → un CARRÉ (losange) avec des coins
+
+              β₂                                     β₂
+              │   ___                                │
+            ╭─┼─╮/  ellipses du coût OLS             ◇  ← l'ellipse touche souvent
+           │  ┼  │                                  ╱│╲    un COIN, sur un axe
+            ╰─┼─╯                                ──◇─┼─◇── β₁   → β₁ = 0
+         ─────┼───── β₁                              ╲│╱
+              │                                      ◇
+   contact n'importe où sur le bord            contact sur un coin = un β nul
+```
+
+| | λ grandit → |
+|---|---|
+| Ridge | Le **cercle** rétrécit → tous les β diminuent ensemble |
+| Lasso | Le **carré** rétrécit → la solution tombe sur ses coins → des β = 0 |
+
+| α | Effet |
+|---|---|
+| `α = 0` | OLS : biais min, variance max |
+| `α ↑` | biais ↑, variance ↓ · Lasso : de plus en plus de β = 0 |
+| `α → ∞` | Tous les βᵢ = 0 → prédiction constante = moyenne de Y |
+
+💡 `β₀` (intercept) **n'est pas pénalisé**.
+💡 Cours : **λ** · sklearn : **`alpha`** → même chose.
+💡 La pénalité dépend de l'échelle des β → **standardiser X avant** Ridge/Lasso.
+💡 Lasso biaise beaucoup : astuce = Lasso pour **sélectionner**, puis `LinearRegression` sur les variables retenues.
+
+## 🔁 Validation croisée (k-fold)
+
+```
+Train découpé en k blocs (ici k = 3)
+  itération 1 :  [VAL ] [train] [train]  → score₁
+  itération 2 :  [train] [VAL ] [train]  → score₂
+  itération 3 :  [train] [train] [VAL ]  → score₃
+                                  → moyenne (performance) · écart-type (stabilité)
+```
+
+| Avantage vs un seul split | |
+|---|---|
+| k évaluations au lieu d'une | Moins dépendant du hasard du découpage |
+| Écart-type | Mesure la **stabilité** : faible = folds d'accord, score fiable |
+
+## 🔎 Hyperparamètre & grid search
+
+| Notion | À retenir |
+|---|---|
+| Paramètre | **Appris** sur les données (β) |
+| Hyperparamètre | **Fixé avant** l'entraînement (α, degree…) |
+| Grid search | Teste toutes les combinaisons de la grille, chacune en k-fold → garde la meilleure moyenne → **réentraîne** sur tout le train |
+| Coût | `n entraînements = k × n_combinaisons` · ex. 3 α × 5 folds = 15 · (3 × 4 × 2) × 5 = 120 |
+
+## 🪜 Les étapes
+
+### 🧹 Phase 1 · Préparer
+
+| # | Étape | Code | Pourquoi |
+|---|---|---|---|
+| 1 | ✂️ X / Y | `X = df.drop(["Salary", "Promoted"], axis=1)`<br>`Y = df["Salary"]` | ⚠️ **Fuite** : `Promoted` est décidé avec le salaire, indisponible au moment de prédire. Toujours se demander : « aurai-je cette feature en prod ? » |
+| 2 | 🔀 Split | `train_test_split(X, Y, test_size=0.2, random_state=0)` | Avant tout fit |
+| 3 | ⚙️ Preprocessing | `ColumnTransformer` (num : imputer mean + scaler · cat : OneHot drop first)<br>`X_train = pre.fit_transform(X_train)` · `X_test = pre.transform(X_test)` | Cf. fiche Preprocessing → 12 colonnes |
+| 4 | 🧬 Polynômes | `poly = PolynomialFeatures(degree=3, include_bias=False)`<br>`X_train = poly.fit_transform(X_train)` · `X_test = poly.transform(X_test)` | Crée produits et puissances : courbes (`Exp²`), interactions (`Sales × Exp`) · degree 1 → 12 · 2 → 90 · 3 → **454** col. pour 400 lignes |
+
+### 📉 Phase 2 · Constater l'overfitting
+
+| # | Étape | Code | Pourquoi |
+|---|---|---|---|
+| 5 | 🏋️ OLS | `baseline = LinearRegression().fit(X_train, Y_train)`<br>`baseline.score(X_train, Y_train)` · `baseline.score(X_test, Y_test)` | train 0.94 · test 0.46 → écart énorme = overfitting |
+| 6 | 🔍 Coefficients | `baseline.coef_.size` · `np.linalg.norm(baseline.coef_)` | 454 β, norme ~ 10⁵ → β qui explosent |
+
+### 🔎 Phase 3 · Régulariser et régler α
+
+| # | Étape | Code | Pourquoi |
+|---|---|---|---|
+| 7 | 📏 CV de référence | `scores = cross_val_score(Ridge(), X_train, Y_train, cv=3)`<br>`scores.mean()` · `scores.std()` | R² ≈ 0.83 ± 0.01 avec α = 1 par défaut |
+| 8 | 🗂️ Grille | `params = {"alpha": [0.01, 0.1, 1, 10, 100, 1000]}` | Échelle **logarithmique** : couvre faible → forte régularisation |
+| 9 | 🔎 Grid search | `gs = GridSearchCV(Ridge(), param_grid=params, cv=3, n_jobs=-1)`<br>`gs.fit(X_train, Y_train)` | `n_jobs=-1` = tous les cœurs CPU · réentraîne le meilleur modèle sur tout le train |
+| 10 | 🏆 Résultat | `gs.best_params_` · `gs.best_score_` | α = 10 · R² CV 0.86 · `best_score_` = moyenne sur les folds, **pas** le test |
+| 11 | 📊 Test final | `gs.score(X_train, Y_train)` · `gs.score(X_test, Y_test)` | Utilise directement le meilleur modèle · train 0.92 · test 0.88 : écart résorbé |
+
+### 🟧 Variante Lasso
+
+| # | Étape | Code | Pourquoi |
+|---|---|---|---|
+| 12 | ✂️ Sélection | `gs = GridSearchCV(Lasso(max_iter=10000), {"alpha": [...]}, cv=3)`<br>`(gs.best_estimator_.coef_ == 0).sum()` | Nombre de variables éliminées · `max_iter` évite l'avertissement de non-convergence |
+
+## ⚠️ Pièges
+
+| Symptôme | Cause / remède |
+|---|---|
+| Meilleur α **au bord** de la grille | Optimum hors grille → l'étendre dans ce sens (ex. `[1000, 5000, 10000]`) |
+| Score CV bien meilleur que le test | Grid search évalué sur le test, ou feature qui fuit (`Promoted`) |
+| `ConvergenceWarning` avec Lasso | Augmenter `max_iter` ou standardiser X |
+| Grid search interminable | `k × n_combinaisons` explose → réduire la grille, `n_jobs=-1` |
+
+💡 **Limite de la démo** : le preprocessing et `PolynomialFeatures` sont fittés sur tout le train avant la CV → les folds de validation « voient » un peu les autres. Version propre : tout dans un `Pipeline`, et la grille sur le nom de l'étape :
+
+```python
+pipe = Pipeline([("pre", preprocessor), ("poly", PolynomialFeatures(3, include_bias=False)), ("model", Ridge())])
+gs = GridSearchCV(pipe, {"model__alpha": [0.01, 0.1, 1, 10, 100, 1000]}, cv=3, n_jobs=-1)
+gs.fit(X_train, Y_train)   # X_train brut (DataFrame)
+```

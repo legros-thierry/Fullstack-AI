@@ -8,7 +8,7 @@ authors = [
 ]
 requires-python = ">=3.14"
 dependencies = [
-    "aifs-hints>=0.2.0",
+    "aifs-hints>=0.3.1",
     "boto3>=1.43.100",
     "dotenv>=0.9.9",
     "matplotlib>=3.11.1",

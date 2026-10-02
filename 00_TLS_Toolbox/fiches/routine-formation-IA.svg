@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="680" height="950" viewBox="0 0 680 950" font-family="Helvetica, Arial, sans-serif">
+<title>Ma routine - Formation Architecte IA (JEDHA)</title>
+<defs>
+<marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#5F5E5A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker>
+<style>
+.th{font-size:14px;font-weight:600}
+.ts{font-size:12px}
+.lbl{font-size:12px;fill:#5F5E5A}
+.grp{font-size:12px;font-weight:600;fill:#444441}
+.warn{font-size:12px;fill:#993C1D;font-weight:600}
+.key{font-size:12px;fill:#854F0B;font-weight:600}
+.arr{stroke:#5F5E5A;stroke-width:1.5;fill:none}
+.teal rect{fill:#E1F5EE;stroke:#0F6E56}.teal .th{fill:#085041}.teal .ts{fill:#0F6E56}
+.purple rect{fill:#EEEDFE;stroke:#534AB7}.purple .th{fill:#3C3489}.purple .ts{fill:#534AB7}
+.coral rect{fill:#FAECE7;stroke:#993C1D}.coral .th{fill:#712B13}.coral .ts{fill:#993C1D}
+.gray rect{fill:#F1EFE8;stroke:#5F5E5A}.gray .th{fill:#444441}.gray .ts{fill:#5F5E5A}
+</style>
+</defs>
+<rect width="680" height="950" fill="#FFFFFF"/>
+<text x="40" y="26" font-size="16" font-weight="600" fill="#2C2C2A">Ma routine · Formation Architecte IA (JEDHA)</text>
+<text class="lbl" x="40" y="46">Un jour de cours : apprendre, mettre en fiches, ranger, réviser</text>
+
+<!-- ============ 1 · EN COURS ============ -->
+<rect x="50" y="66" width="600" height="160" rx="12" fill="none" stroke="#888780" stroke-width="0.8" stroke-dasharray="4 4"/>
+<text class="grp" x="634" y="86" text-anchor="end">1 · EN COURS · 9h30 – 18h30</text>
+
+<g class="gray"><rect x="60" y="96" width="280" height="48" rx="8" stroke-width="0.8"/><text class="th" x="200" y="112" text-anchor="middle" dominant-baseline="central">1 · Matin : théorie + code</text><text class="ts" x="200" y="130" text-anchor="middle" dominant-baseline="central">cours du formateur</text></g>
+<text class="lbl" x="370" y="115">Notes prises dans Excalidraw</text>
+<text class="lbl" x="370" y="133">Viser les concepts, pas la syntaxe</text>
+<line x1="200" y1="146" x2="200" y2="158" class="arr" marker-end="url(#arrow)"/>
+
+<g class="purple"><rect x="60" y="160" width="280" height="48" rx="8" stroke-width="0.8"/><text class="th" x="200" y="176" text-anchor="middle" dominant-baseline="central">2 · Après-midi : exercices</text><text class="ts" x="200" y="194" text-anchor="middle" dominant-baseline="central">monorepo fullstack-ai · uv</text></g>
+<text class="lbl" x="370" y="179">VS Code / Cursor sur le Mac</text>
+<text class="lbl" x="370" y="197">1 exercice = 1 membre du workspace uv</text>
+
+<!-- ============ 2 · APRÈS LE COURS ============ -->
+<line x1="200" y1="210" x2="200" y2="276" class="arr" marker-end="url(#arrow)"/>
+<rect x="50" y="244" width="600" height="356" rx="12" fill="none" stroke="#888780" stroke-width="0.8" stroke-dasharray="4 4"/>
+<text class="grp" x="634" y="264" text-anchor="end">2 · APRÈS LE COURS · AVEC CLAUDE</text>
+
+<g class="gray"><rect x="60" y="278" width="280" height="48" rx="8" stroke-width="0.8"/><text class="th" x="200" y="294" text-anchor="middle" dominant-baseline="central">3 · Partager le cours du jour</text><text class="ts" x="200" y="312" text-anchor="middle" dominant-baseline="central">support + notes Excalidraw</text></g>
+<text class="lbl" x="370" y="297">1 jour de cours = 1 schéma + 2 fiches</text>
+<text class="lbl" x="370" y="315">Notes Excalidraw fusionnées dedans</text>
+<line x1="200" y1="328" x2="200" y2="340" class="arr" marker-end="url(#arrow)"/>
+
+<g class="coral"><rect x="60" y="342" width="280" height="48" rx="8" stroke-width="0.8"/><text class="th" x="200" y="358" text-anchor="middle" dominant-baseline="central">4 · Schéma global d'abord</text><text class="ts" x="200" y="376" text-anchor="middle" dominant-baseline="central">étapes en 3–4 mots, boucles visibles</text></g>
+<text class="key" x="370" y="361">Top-down : la vue d'ensemble</text>
+<text class="key" x="370" y="379">avant le détail</text>
+<line x1="200" y1="392" x2="200" y2="404" class="arr" marker-end="url(#arrow)"/>
+
+<g class="coral"><rect x="60" y="406" width="280" height="48" rx="8" stroke-width="0.8"/><text class="th" x="200" y="422" text-anchor="middle" dominant-baseline="central">5 · Fiche méthode</text><text class="ts" x="200" y="440" text-anchor="middle" dominant-baseline="central">tableau : étape · code · pourquoi</text></g>
+<text class="lbl" x="370" y="425">Synthétique et visuelle</text>
+<text class="lbl" x="370" y="443">Fonctions et librairies clés par étape</text>
+<line x1="200" y1="456" x2="200" y2="468" class="arr" marker-end="url(#arrow)"/>
+
+<g class="coral"><rect x="60" y="470" width="280" height="48" rx="8" stroke-width="0.8"/><text class="th" x="200" y="486" text-anchor="middle" dominant-baseline="central">6 · Fiche simple · PDF</text><text class="ts" x="200" y="504" text-anchor="middle" dominant-baseline="central">mots simples + termes techniques</text></g>
+<text class="lbl" x="370" y="489">Expliqué comme à un ado de 14 ans</text>
+<text class="lbl" x="370" y="507">Chaque terme : une définition rapide</text>
+<line x1="200" y1="520" x2="200" y2="532" class="arr" marker-end="url(#arrow)"/>
+
+<g class="purple"><rect x="60" y="534" width="280" height="48" rx="8" stroke-width="0.8"/><text class="th" x="200" y="550" text-anchor="middle" dominant-baseline="central">7 · Template de code</text><text class="ts" x="200" y="568" text-anchor="middle" dominant-baseline="central">testé, à copier puis adapter</text></g>
+<text class="lbl" x="370" y="553">Cellules # %% · points d'adaptation</text>
+<text class="lbl" x="370" y="571">ex. ml_supervise_template.py</text>
+
+<!-- ============ 3 · CAPITALISER ============ -->
+<line x1="200" y1="584" x2="200" y2="650" class="arr" marker-end="url(#arrow)"/>
+<rect x="50" y="618" width="600" height="228" rx="12" fill="none" stroke="#888780" stroke-width="0.8" stroke-dasharray="4 4"/>
+<text class="grp" x="634" y="638" text-anchor="end">3 · CAPITALISER ET RÉVISER</text>
+
+<g class="teal"><rect x="60" y="652" width="280" height="48" rx="8" stroke-width="0.8"/><text class="th" x="200" y="668" text-anchor="middle" dominant-baseline="central">8 · Ranger dans TLS_ToolBox</text><text class="ts" x="200" y="686" text-anchor="middle" dominant-baseline="central">fiches, schémas, templates</text></g>
+<text class="lbl" x="370" y="671">Un seul endroit, plus rien d'éparpillé</text>
+<text class="lbl" x="370" y="689">Index à jour dans README.md</text>
+<line x1="200" y1="702" x2="200" y2="714" class="arr" marker-end="url(#arrow)"/>
+
+<g class="teal"><rect x="60" y="716" width="280" height="48" rx="8" stroke-width="0.8"/><text class="th" x="200" y="732" text-anchor="middle" dominant-baseline="central">9 · Git commit + push</text><text class="ts" x="200" y="750" text-anchor="middle" dominant-baseline="central">dépôt fullstack-ai · GitHub</text></g>
+<text class="warn" x="370" y="735">⚠ .env et données hors de Git</text>
+<text class="lbl" x="370" y="753">Retrouvable depuis tous mes appareils</text>
+<line x1="200" y1="766" x2="200" y2="778" class="arr" marker-end="url(#arrow)"/>
+
+<g class="gray"><rect x="60" y="780" width="280" height="48" rx="8" stroke-width="0.8"/><text class="th" x="200" y="796" text-anchor="middle" dominant-baseline="central">10 · Réviser</text><text class="ts" x="200" y="814" text-anchor="middle" dominant-baseline="central">schéma → fiches → code</text></g>
+<text class="lbl" x="370" y="799">Du global vers le détail</text>
+<text class="lbl" x="370" y="817">Réutiliser les templates en exercice</text>
+
+<!-- boucle : jour suivant -->
+<path d="M58 804 L36 804 L36 120 L58 120" class="arr" marker-end="url(#arrow)"/>
+<text class="lbl" x="30" y="462" text-anchor="middle" transform="rotate(-90 30 462)">jour de cours suivant</text>
+
+<!-- légende -->
+<g class="gray"><rect x="40" y="866" width="14" height="14" rx="3"/></g><text class="lbl" x="60" y="877">cours / moi</text>
+<g class="purple"><rect x="160" y="866" width="14" height="14" rx="3"/></g><text class="lbl" x="180" y="877">code</text>
+<g class="coral"><rect x="250" y="866" width="14" height="14" rx="3"/></g><text class="lbl" x="270" y="877">fiches et schémas</text>
+<g class="teal"><rect x="410" y="866" width="14" height="14" rx="3"/></g><text class="lbl" x="430" y="877">stockage (dépôt Git)</text>
+
+<text class="lbl" x="40" y="910">Règle d'or : je comprends les concepts, je ne mémorise pas la syntaxe (templates à adapter)</text>
+<text class="lbl" x="40" y="930">Outils : VS Code + Git uniquement, pas de nouvel outil à apprendre</text>
+</svg>
