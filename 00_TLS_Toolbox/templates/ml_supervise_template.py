@@ -1,39 +1,44 @@
 # %% [markdown]
 # # Template ML supervisé · EDA → Preprocessing → Modélisation → Évaluation
 # Cellules `# %%` exécutables dans VS Code (Run Cell) ou convertibles en notebook.
-# Règle d'or : split AVANT tout fit ; le preprocessing est fitté sur le train uniquement,
-# via un Pipeline + ColumnTransformer (le même objet sert en test et en prod).
+# Règle d'or : split AVANT tout fit ; le preprocessing est fitté sur le train
+# uniquement, via un Pipeline + ColumnTransformer (le même objet sert en test
+# et en prod).
 
 # %% 0 · Imports et configuration
-import numpy as np
-import pandas as pd
-import joblib
 import warnings
 
+import joblib
+import numpy as np
+import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
-import plotly.io as pio
-
-from sklearn.model_selection import train_test_split, cross_val_score, GridSearchCV
-from sklearn.pipeline import Pipeline
+from IPython.display import display
 from sklearn.compose import ColumnTransformer
+from sklearn.datasets import fetch_california_housing
+from sklearn.dummy import DummyClassifier, DummyRegressor
 from sklearn.impute import SimpleImputer
-from sklearn.preprocessing import StandardScaler, OneHotEncoder
-from sklearn.dummy import DummyRegressor, DummyClassifier
-from sklearn.linear_model import LinearRegression, Ridge, LogisticRegression
+from sklearn.linear_model import LinearRegression, LogisticRegression, Ridge
 from sklearn.metrics import (
-    r2_score,
+    accuracy_score,
+    classification_report,
+    confusion_matrix,
+    f1_score,
     mean_absolute_error,
     mean_squared_error,
-    accuracy_score,
-    f1_score,
+    r2_score,
     roc_auc_score,
-    confusion_matrix,
-    classification_report,
 )
+from sklearn.model_selection import GridSearchCV, cross_val_score, train_test_split
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import OneHotEncoder, StandardScaler
 
 warnings.filterwarnings("ignore", category=DeprecationWarning)
-# pio.renderers.default = "svg"   # Jedha ; "iframe" sur JULIE ; défaut OK dans VS Code
+
+# Rendu des graphiques plotly : le défaut convient dans VS Code.
+# Sur Jedha ("svg") ou JULIE ("iframe"), décommenter les deux lignes :
+# import plotly.io as pio
+# pio.renderers.default = "svg"
 
 # --- À adapter -------------------------------------------------------------
 TARGET = "Price"  # nom de la colonne cible
@@ -44,8 +49,6 @@ RANDOM_STATE = 42
 
 # %% 1 · Chargement
 # Option A : jeu de données sklearn (démo)
-from sklearn.datasets import fetch_california_housing
-
 df = fetch_california_housing(as_frame=True).frame.rename(
     columns={"MedHouseVal": TARGET}
 )
@@ -79,16 +82,16 @@ cat_cols = df.drop(columns=TARGET).select_dtypes(exclude="number").columns.tolis
 print("Numériques :", num_cols)
 print("Catégorielles :", cat_cols)
 if cat_cols:
-    display(
-        df[cat_cols].nunique().sort_values(ascending=False)
-    )  # forte cardinalité → OneHot coûteux
+    # forte cardinalité → OneHot coûteux
+    display(df[cat_cols].nunique().sort_values(ascending=False))
 
 # %% 2.5 · EDA · distribution de la cible
 if TASK == "regression":
     fig = px.histogram(df, x=TARGET, nbins=50, title=f"Distribution de {TARGET}")
 else:
     fig = px.histogram(df, x=TARGET, title=f"Répartition des classes de {TARGET}")
-    print((df[TARGET].value_counts(normalize=True) * 100).round(1))  # déséquilibre ?
+    # déséquilibre des classes ?
+    print((df[TARGET].value_counts(normalize=True) * 100).round(1))
 fig.show()
 
 # %% 2.6 · EDA · distributions univariées (numériques)
@@ -124,7 +127,7 @@ fig = px.scatter_matrix(
     dimensions=cols_pair,
     title="Pair plot",
 )
-fig.update_traces(diagonal_visible=False, marker=dict(size=2, opacity=0.4))
+fig.update_traces(diagonal_visible=False, marker={"size": 2, "opacity": 0.4})
 fig.update_layout(autosize=False, width=1000, height=1000)
 fig.show()
 
@@ -152,10 +155,10 @@ def iqr_outliers(s: pd.Series, k: float = 1.5) -> int:
 
 display(pd.Series({c: iqr_outliers(df[c]) for c in num_cols}, name="nb_outliers_IQR"))
 
-# %% 3 · Nettoyage (AVANT le split : uniquement des règles fixes, sans statistique apprise)
+# %% 3 · Nettoyage (AVANT le split : règles fixes, sans statistique apprise)
 df = df.drop_duplicates()
 
-# Filtre d'outliers par seuils métier (exemple California Housing)
+# Filtre d'outliers par seuils métier (exemple California Housing) : À ADAPTER
 mask = (
     (df["AveRooms"] < 10)
     & (df["AveBedrms"] < 10)
@@ -223,9 +226,8 @@ dummy = (
     else DummyClassifier(strategy="most_frequent")
 )
 dummy.fit(X_train, y_train)
-print(
-    "Dummy · score test :", round(dummy.score(X_test, y_test), 4)
-)  # R² ≈ 0 ou accuracy = classe majoritaire
+# Attendu : R² ≈ 0 (régression) ou accuracy = part de la classe majoritaire
+print("Dummy · score test :", round(dummy.score(X_test, y_test), 4))
 
 # %% 6.2 · Modèle (preprocessing + estimateur dans un seul Pipeline)
 estimator = (
@@ -297,8 +299,8 @@ else:
     px.imshow(
         cm,
         text_auto=True,
-        x=[str(l) for l in labels],
-        y=[str(l) for l in labels],
+        x=[str(lab) for lab in labels],
+        y=[str(lab) for lab in labels],
         labels={"x": "Prédit", "y": "Réel"},
         title="Matrice de confusion (test)",
     ).show()
@@ -342,7 +344,7 @@ coefs = coefs.sort_values("abs_coef", ascending=True)
 fig = px.bar(
     coefs, x="coef", y="feature", orientation="h", title="Coefficients du modèle"
 )
-fig.update_layout(showlegend=False, margin=dict(l=150))
+fig.update_layout(showlegend=False, margin={"l": 150})
 fig.show()
 
 # %% 10 · Sauvegarde (un seul artefact : preprocessing + modèle)
